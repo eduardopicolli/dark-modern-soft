@@ -1,0 +1,16 @@
+{
+  "teal": "#4fb0a6",
+  "blue": "#4690d2",
+  "link": "#51aed6",
+  "cyan": "#68cbe6",
+  "yellow": "#e8bd5f",
+  "green": "#6ac483",
+  "red": "#e4506f",
+  "subtext": "#aeb0b6",
+  "overlay": "#84858a",
+  "surface": "#3b3c3e",
+  "text": "#d4d6dd",
+  "track": "#2e2f33",
+  "background": "#28292e",
+  "crust": "#1d1e22"
+}

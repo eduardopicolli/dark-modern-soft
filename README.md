@@ -25,6 +25,16 @@ code --install-extension dark-modern-soft.vsix
 
 Depois escolha **Dark Modern Soft** em `Ctrl+K Ctrl+T`.
 
+## Terminais
+
+Os arquivos em `extras/` usam as mesmas cores do tema:
+
+- `extras/windows-terminal.json`: esquema de cores e tema da janela do Windows Terminal. Copie os itens de `schemes` e `themes` para o `settings.json` do Windows Terminal e escolha **Dark Modern Soft**.
+- `extras/zsh/dark-modern-soft-powerline.zsh-theme`: prompt Powerline para Oh My Zsh (precisa de uma Nerd Font). Copie para `~/.oh-my-zsh/custom/themes/` e use `ZSH_THEME="dark-modern-soft-powerline"`.
+- `extras/palette.json`: cores de destaque, para usar em outras ferramentas.
+
+O terminal integrado do VS Code já vem com as mesmas cores ANSI do esquema do Windows Terminal.
+
 ## Ajustes e build
 
 O tema é gerado por script, a partir dos dois temas de origem em `base-*.json`. Os ajustes ficam no topo do `build.py`:
@@ -34,7 +44,7 @@ O tema é gerado por script, a partir dos dois temas de origem em `base-*.json`.
 - `HIGHLIGHT_SOFTEN`: quanto o azul dos destaques da interface se mistura ao texto.
 
 ```sh
-python3 build.py   # gera themes/dark-modern-soft.json
+python3 build.py   # gera themes/dark-modern-soft.json e extras/*.json
 python3 pack.py    # gera dark-modern-soft.vsix
 ```
 

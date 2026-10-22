@@ -1,0 +1,17 @@
+{
+  "name": "dark-modern-soft",
+  "displayName": "Dark Modern Soft",
+  "description": "O Dark+ do VS Code suavizado: mesma lógica de cores do Slack Dark Mode, puxada para a paleta Catppuccin Frappé, sobre uma interface neutra",
+  "version": "0.4.0",
+  "publisher": "eduardo-picolli",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/eduardopicolli/dark-modern-soft" },
+  "engines": { "vscode": "^1.70.0" },
+  "categories": ["Themes"],
+  "keywords": ["theme", "dark", "dark+", "soft", "pastel", "catppuccin"],
+  "contributes": {
+    "themes": [
+      { "label": "Dark Modern Soft", "uiTheme": "vs-dark", "path": "./themes/dark-modern-soft.json" }
+    ]
+  }
+}

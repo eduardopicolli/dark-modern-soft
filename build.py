@@ -37,6 +37,41 @@ SLACK_TO_FRAPPE = {
     "#000080": "#8caaee",  # header
 }
 
+# Cores de terminal (ANSI) do esquema "Slack Dark Mode" do Windows Terminal -> Frappé.
+# Vão para o terminal do VS Code e para o Windows Terminal (extras/).
+TERMINAL_ANSI = {
+    "black": ("#3a3d41", "#51576d"),
+    "red": ("#d16969", "#e78284"),
+    "green": ("#6a9955", "#a6d189"),
+    "yellow": ("#d7ba7d", "#e5c890"),
+    "blue": ("#569cd6", "#8caaee"),
+    "purple": ("#b267e6", "#ca9ee6"),
+    "cyan": ("#4ec9b0", "#81c8be"),
+    "white": ("#d4d4d4", "#b5bfe2"),
+    "brightBlack": ("#7a7a7a", "#838ba7"),
+    "brightRed": ("#f44747", "#e78284"),
+    "brightGreen": ("#b5cea8", "#a6d189"),
+    "brightYellow": ("#dcdcaa", "#e5c890"),
+    "brightBlue": ("#9cdcfe", "#99d1db"),
+    "brightPurple": ("#c586c0", "#f4b8e4"),
+    "brightCyan": ("#7fe0cc", "#81c8be"),
+    "brightWhite": ("#e6e6e6", "#c6d0f5"),
+}
+
+# Cores de marca do Slack usadas no prompt do zsh e no mod Clean View -> Frappé
+ACCENTS = {
+    "teal": ("#1d978d", "#81c8be"),
+    "blue": ("#0077b5", "#8caaee"),
+    "link": ("#1d9bd1", "#85c1dc"),
+    "cyan": ("#36c5f0", "#99d1db"),
+    "yellow": ("#ecb22e", "#e5c890"),
+    "green": ("#2eb67d", "#a6d189"),
+    "red": ("#e01e5a", "#e78284"),
+    "subtext": ("#ababab", "#a5adce"),
+    "overlay": ("#7a7a7a", "#838ba7"),
+    "surface": ("#404040", "#51576d"),
+}
+
 # Textos destacados da interface (arquivo selecionado, aba ativa, item de menu...):
 # o azul do Frappé misturado meio a meio com o texto, para chamar menos atenção
 HIGHLIGHT_KEYS = [
@@ -90,6 +125,35 @@ def remap_tokens(token_colors):
     return out
 
 
+def terminal_palette(colors):
+    ansi = {name: neutralize(blend(slack, frappe)) for name, (slack, frappe) in TERMINAL_ANSI.items()}
+    selection = colors["editor.selectionBackground"]
+    return {
+        "background": colors["editor.background"],
+        "foreground": TEXT,
+        "cursorColor": colors["editorCursor.foreground"],
+        "selectionBackground": blend(colors["editor.background"], selection[:7], int(selection[7:9], 16) / 255),
+        **ansi,
+    }
+
+
+def accent_palette(colors):
+    accents = {name: neutralize(blend(slack, frappe)) for name, (slack, frappe) in ACCENTS.items()}
+    return {
+        **accents,
+        "text": TEXT,
+        "track": blend(colors["editor.background"], accents["surface"], 0.3),
+        "background": colors["editor.background"],
+        "crust": colors["activityBar.background"],
+    }
+
+
+def write_json(path, data):
+    path.parent.mkdir(exist_ok=True)
+    path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"ok: {path}")
+
+
 def main():
     base = json.loads((ROOT / "base-calmppuccin-frappe.json").read_text(encoding="utf-8"))
     slack = json.loads((ROOT / "base-slack-dark-mode.json").read_text(encoding="utf-8"))
@@ -102,15 +166,33 @@ def main():
     brackets = [blend(slack_color, frappe_color) for slack_color, frappe_color in BRACKETS.items()]
     for i in range(6):
         colors[f"editorBracketHighlight.foreground{i + 1}"] = brackets[i % 3]
+    terminal = terminal_palette(colors)
+    vscode_ansi = {"purple": "Magenta", "brightPurple": "BrightMagenta"}
+    for name, value in terminal.items():
+        if name in TERMINAL_ANSI:
+            key = vscode_ansi.get(name, name[0].upper() + name[1:])
+            colors[f"terminal.ansi{key}"] = value
+    colors["terminal.foreground"] = TEXT
     theme = {
         "name": "Dark Modern Soft",
         "type": "dark",
         "colors": colors,
         "tokenColors": remap_tokens(slack["tokenColors"]),
     }
-    out = ROOT / "themes" / "dark-modern-soft.json"
-    out.write_text(json.dumps(theme, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"ok: {out}")
+    write_json(ROOT / "themes" / "dark-modern-soft.json", theme)
+    write_json(ROOT / "extras" / "windows-terminal.json", {
+        "schemes": [{"name": "Dark Modern Soft", **terminal}],
+        "themes": [{
+            "name": "Dark Modern Soft",
+            "tab": {"background": colors["editor.background"] + "FF", "iconStyle": "default",
+                    "showCloseButton": "always", "unfocusedBackground": None},
+            "tabRow": {"background": colors["activityBar.background"] + "FF",
+                       "unfocusedBackground": colors["activityBar.background"] + "FF"},
+            "window": {"applicationTheme": "dark", "experimental.rainbowFrame": False,
+                       "frame": None, "unfocusedFrame": None, "useMica": False},
+        }],
+    })
+    write_json(ROOT / "extras" / "palette.json", accent_palette(colors))
 
 
 if __name__ == "__main__":

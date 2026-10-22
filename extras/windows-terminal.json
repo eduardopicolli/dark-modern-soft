@@ -1,0 +1,49 @@
+{
+  "schemes": [
+    {
+      "name": "Dark Modern Soft",
+      "background": "#28292e",
+      "foreground": "#d4d6dd",
+      "cursorColor": "#adafb5",
+      "selectionBackground": "#45464d",
+      "black": "#3a3b3e",
+      "red": "#dc7676",
+      "green": "#88b56f",
+      "yellow": "#dec186",
+      "blue": "#71a3e2",
+      "purple": "#be82e6",
+      "cyan": "#68c8b7",
+      "white": "#cbced4",
+      "brightBlack": "#84858a",
+      "brightRed": "#ee6466",
+      "brightGreen": "#aed098",
+      "brightYellow": "#e0d29d",
+      "brightBlue": "#9ad6ec",
+      "brightPurple": "#dc9fd2",
+      "brightCyan": "#80d4c5",
+      "brightWhite": "#dee0e6"
+    }
+  ],
+  "themes": [
+    {
+      "name": "Dark Modern Soft",
+      "tab": {
+        "background": "#28292eFF",
+        "iconStyle": "default",
+        "showCloseButton": "always",
+        "unfocusedBackground": null
+      },
+      "tabRow": {
+        "background": "#1d1e22FF",
+        "unfocusedBackground": "#1d1e22FF"
+      },
+      "window": {
+        "applicationTheme": "dark",
+        "experimental.rainbowFrame": false,
+        "frame": null,
+        "unfocusedFrame": null,
+        "useMica": false
+      }
+    }
+  ]
+}
